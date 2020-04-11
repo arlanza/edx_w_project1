@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Pr1 - Registration
+{% endblock %}
+
+{% block body %}
+  <h2>Register</h2>
+  <p>Insert your data</p>
+
+    <form action="registration" method="post" oninput='pwd.setCustomValidity(pwd2.value != pwd.value ? "Passwords do not match." : "")'>
+
+        <div class="form-group">
+          <label for="usr">Full Name:</label>
+          <input type="text" class="form-control" name="fullname" placeholder="Reader Full Name">
+        </div>
+
+        <div class="form-group">
+           <label for="nick">Nick:</label>
+            <input type="text" class="form-control" name="name" placeholder="Choose a nick">
+        </div>
+
+        <div class="form-group">
+            <label for="Passwd">Password:</label>
+            <input type="password" class="form-control" name="pwd" placeholder="Choose a passwd">
+            <input type="password" class="form-control" name="pwd2" placeholder="Confirm passwd">
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-primary">Register</button>
+        </div>
+
+    </form>
+{% endblock %}
