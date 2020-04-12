@@ -4,13 +4,17 @@ An example application with Pyhton SQLAlchemy and FLASK_APP
 
 ## Files
 
-### Flask Application
+### Flask Application - book directory
 . book/application.py Flask Aplicacion
 . book/model.py - SQLAlchemy models for DB and classes
 
-### Utils
-. createdb.py - Create tables
 
+### Utils
+. createdb.py - Create tables (import book.model)
+  . usr (key: name)
+  . book (key: isbn)
+  . review (key: book_isbn+usr_name)
+. import.py - Import books.csv (import book.model)
 
 ### Other files
 . requeriments.txt - List of package requeriments and versions.

@@ -11,9 +11,11 @@ app = Flask(__name__)
 
 # Check for database_url environment variable and init sqlalchemy environmen
 if os.getenv("DATABASE_URL"):
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+    database_url = os.getenv("DATABASE_URL")
 else:
-    app.config["SQLALCHEMY_DATABASE_URI"] ="postgres://xcnhprolmjsfye:4c46c46015f74d72337667afdbaaa0632951292cc55bbde2e7b0d124efd29e76@ec2-46-137-177-160.eu-west-1.compute.amazonaws.com:5432/devprdb0tctod0"
+    database_url = "postgres://xcnhprolmjsfye:4c46c46015f74d72337667afdbaaa0632951292cc55bbde2e7b0d124efd29e76@ec2-46-137-177-160.eu-west-1.compute.amazonaws.com:5432/devprdb0tctod0"
+
+app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
 
@@ -29,7 +31,7 @@ app.secret_key = 'super secret key for book app'
 #Session(app)
 
 # Set up database
-engine = create_engine(os.getenv("DATABASE_URL"))
+engine = create_engine(database_url)
 db = scoped_session(sessionmaker(bind=engine))
 
 #Index
@@ -115,6 +117,10 @@ def login():
 
 @app.route('/logout', methods=["GET","POST"])
 def logout():
-    name = session['user_name']
+    try:
+        name = session['user_name']
+    except KeyError:
+        return render_template("error.html", message="Your are not logged in")
+
     session.pop('user_name', None)
     return render_template("success.html", message= f"{name} logged out")
