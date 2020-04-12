@@ -188,7 +188,7 @@ def booksearch():
     return render_template("books.html",books=books)
 
 
-@app.route("/books/<string:isbn>")
+@app.route("/books/<string:isbn>", methods=["GET","POST"])
 def book(isbn):
     """List details about a book"""
 
@@ -197,4 +197,37 @@ def book(isbn):
     if book is None:
         return render_template("error.html", message="No such book.")
 
-    return render_template("book.html", book=book)
+    # Get all reviews.
+    reviews=book.reviews
+    return render_template("book.html", book=book, reviews=reviews)
+
+@app.route("/books/<string:isbn>/reviewadd", methods=["POST"])
+def reviewadd(isbn):
+    """List details about a book"""
+
+    # Make sure book exists.
+    book = Book.query.get(isbn)
+    if book is None:
+        return render_template("error.html", message="No such book.")
+
+    # Get session name
+    name = session['user_name']
+
+    # Get form info
+    try:
+        text   = request.form.get("text")
+        rating = request.form.get("rating")
+    except ValueError:
+            return render_template("error.html", message="Invalid data")
+
+    if not text and not rating:
+        return render_template("error.html", message="Please, complete all data");
+
+    #Check no previous review for this users and this book
+    previousreview = Review.query.filter(and_(Review.book_isbn==isbn,Review.user_name==name)).first()
+    if previousreview:
+        return render_template("error.html", message="You have already a review for this book");
+
+    book.add_review(name,text,rating)
+    reviews=book.reviews
+    return render_template("book.html", book=book, reviews=reviews)

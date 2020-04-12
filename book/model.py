@@ -8,6 +8,12 @@ class Book(db.Model):
     title = db.Column(db.String, nullable=False)
     author = db.Column(db.String, nullable=False)
     year = db.Column(db.Integer, nullable=False)
+    reviews = db.relationship("Review", backref="book", lazy=True)
+
+    def add_review(self, name,text,rating):
+        review = Review(book_isbn=self.isbn, user_name=name, text=text, rating=rating)
+        db.session.add(review)
+        db.session.commit()
 
     def print_info(self):
         print(f"Isbn: {self.isbn}")
