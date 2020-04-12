@@ -7,5 +7,7 @@
 {% block body %}
     <h1>Error:</h1>
     {{ message }}
-    <p> <a href="javascript:history.back()">Go Back</a> </p>
+    <div class="form-group">
+        <button class="btn btn-primary" onclick="window.history.back()">Back</button>
+    </div>
 {% endblock %}

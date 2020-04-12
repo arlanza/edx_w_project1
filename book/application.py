@@ -1,5 +1,6 @@
 import os
 import requests
+import hashlib
 
 from flask import Flask, render_template, jsonify, request, session
 from flask_session import Session
@@ -80,8 +81,11 @@ def registration():
     if user is not None:
         return render_template("error.html", message="There's already a user with this name. Choose another name, please.")
 
+    # Encode passwd
+    pwd_encoded = hashlib.sha3_512(pwd.encode()).hexdigest()
+
     # Add User into DB
-    user = User(name=name, passwd=pwd, fullname=fullname)
+    user = User(name=name, passwd=pwd_encoded, fullname=fullname)
     db.add(user)
     db.commit()
 
@@ -89,7 +93,7 @@ def registration():
     session['user_name']=user.name;
 
     #output
-    return render_template("success.html", message= f"{user.name} registrated.")
+    return render_template("success.html", message= f"{user.name} registrated. Pwd: {pwd} PwdEncoded: {pwd_encoded}")
 
 @app.route('/showloginform')
 def showloginform():
@@ -113,11 +117,11 @@ def login():
     # Get form information.
     try:
         name     = request.form.get("name")
-        passwd      = request.form.get("pwd")
+        pwd      = request.form.get("pwd")
     except ValueError:
             return render_template("error.html", message="Invalid data")
 
-    if not name or not passwd:
+    if not name or not pwd:
         return render_template("error.html", message="Not empty data allowed")
 
     # Not previous user registed
@@ -127,17 +131,14 @@ def login():
     if user is None:
         return render_template("error.html", message="Try another Nick")
 
-    if not user.passwd == passwd:
-        return render_template("success.html", message= "Invalid passwd")
+    # Encode passwd
+    pwd_encoded = hashlib.sha3_512(pwd.encode()).hexdigest()
+
+    if not pwd_encoded == user.passwd:
+        #return render_template("error.html", message= "Invalid passwd")
+        return render_template("error.html", message= f" pwd {pwd} pwd_encoded {pwd_encoded} passwdbd {user.passwd} ")
 
     session['user_name']=user.name;
-
-    #if 'visits' in session:
-    #    session['visits'] = session.get('visits') + 1  # reading and updating session data
-    #else:
-    #    session['visits'] = 1 # setting session data
-    #return render_template("success.html", message= f"{session.get('visits'), {session.get(user.name)},}   num de visitas.")
-
 
     return render_template("success.html", message= f"{session.get('user_name')} logged in")
 

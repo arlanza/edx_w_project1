@@ -7,7 +7,7 @@
 {% block body %}
 
 
-    <h1>Book Details</h1>
+    <h2>Book Details</h2>
 
     <ul>
         <li>Isbn: {{ book.isbn }}</li>
@@ -17,7 +17,7 @@
     </ul>
 
 
-    <h2>GoodReads Info</h2>
+    <h3>GoodReads Info</h3>
 
       <ul>
           <li>work_ratings_count: {{ goodreadsbook.work_ratings_count }}</li>
@@ -28,7 +28,7 @@
 
 
 
-    <h2>Local Reviews</h2>
+    <h3>Local Reviews</h3>
     <ul>
         {% for review in reviews %}
             <li> Rate: {{ review.rating }}
@@ -44,7 +44,7 @@
 
 
 
-    <h3>Add a new local review</h3>
+    <h4>Add a new local review</h4>
     <form action= "/books/{{ book.isbn }}/reviewadd"   method="post")'>
 
         <div class="form-group">
