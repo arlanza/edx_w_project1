@@ -220,7 +220,7 @@ def reviewadd(isbn):
     except ValueError:
             return render_template("error.html", message="Invalid data")
 
-    if not text and not rating:
+    if not text or not rating:
         return render_template("error.html", message="Please, complete all data");
 
     #Check no previous review for this users and this book
