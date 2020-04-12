@@ -1,10 +1,12 @@
 import os
+import requests
 
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, jsonify, request, session
 from flask_session import Session
 from sqlalchemy import create_engine, or_, and_
 from sqlalchemy.orm import scoped_session, sessionmaker
 from model import *
+
 
 
 app = Flask(__name__)
@@ -18,6 +20,9 @@ else:
 app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
+
+# Goodreads apikey
+GOODREADS_APIKEY="v9UkBJzCMLyRy0ArJ2kIpA"
 
 # To enable session
 app.secret_key = 'super secret key for book app'
@@ -199,7 +204,15 @@ def book(isbn):
 
     # Get all reviews.
     reviews=book.reviews
-    return render_template("book.html", book=book, reviews=reviews)
+
+    # Get goodreads info
+    res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": GOODREADS_APIKEY, "isbns": isbn})
+    if res.status_code == 200:
+        goodreadsbook=res.json()["books"][0]
+    else:
+        goodreadsbook=None
+
+    return render_template("book.html", book=book, reviews=reviews,goodreadsbook=goodreadsbook)
 
 @app.route("/books/<string:isbn>/reviewadd", methods=["POST"])
 def reviewadd(isbn):
@@ -230,4 +243,34 @@ def reviewadd(isbn):
 
     book.add_review(name,text,rating)
     reviews=book.reviews
-    return render_template("book.html", book=book, reviews=reviews)
+
+    # Get goodreads info
+    res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": GOODREADS_APIKEY, "isbns": isbn})
+    if res.status_code == 200:
+        goodreadsbook=res.json()["books"][0]
+    else:
+        goodreadsbook=None
+
+    return render_template("book.html", book=book, reviews=reviews,goodreadsbook=goodreadsbook)
+
+@app.route("/api/<string:isbn>")
+def api_book(isbn):
+    """Return details about a book."""
+
+    # Make sure book exists.
+    book = Book.query.get(isbn)
+    if book is None:
+        return jsonify({"error": "Invalid isbn"}), 422
+
+    # Get goodreads info
+    res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": GOODREADS_APIKEY, "isbns": isbn})
+
+    #return json object
+    return jsonify({
+            "title": book.title,
+            "author": book.author,
+            "year": book.year,
+            "isbn": book.isbn,
+            "review_count" :res.json()["books"][0].get("work_ratings_count"),
+            "average_score": float(res.json()["books"][0].get("average_rating"))
+    })
