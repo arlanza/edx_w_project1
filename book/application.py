@@ -171,18 +171,20 @@ def booksearch():
     # Get form info
     try:
         isbn     = request.form.get("isbn")
-        title      = request.form.get("title")
-        author      = request.form.get("author")
+        title    = request.form.get("title")
+        author   = request.form.get("author")
     except ValueError:
             return render_template("error.html", message="Invalid data")
 
     if not isbn and not title and not author:
-        return render_template("error.html", message="Your must insert, at least, part of a data");
+        return render_template("error.html", message="Your must insert, at least, part of a data.");
 
     # Search
-    # TODO:: FILTER QUERY
+    books = Book.query.filter(and_(Book.isbn.like(f"%{isbn}%"), Book.title.like(f"%{title}%"), Book.author.like(f"%{author}%"))).all()
 
-    books=Book.query.all();
+    if not books:
+        return render_template("error.html", message=f"Form data: .{isbn}.{title}.{author}. No Match");
+
     return render_template("books.html",books=books)
 
 
