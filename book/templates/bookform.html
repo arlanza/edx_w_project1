@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Pr1 - Registration
+{% endblock %}
+
+{% block body %}
+  <h2>Register</h2>
+  <p>Insert your data</p>
+
+    <form action="booksearch" method="post")'>
+
+        <div class="form-group">
+          <label for="usr">Isbn:</label>
+          <input type="text" class="form-control" name="isbn" placeholder="Isbn">
+        </div>
+
+        <div class="form-group">
+           <label for="nick">Title:</label>
+            <input type="text" class="form-control" name="name" placeholder="Title">
+        </div>
+
+        <div class="form-group">
+            <label for="Passwd">Author:</label>
+            <input type="text" class="form-control" name="pwd" placeholder="Author">
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-primary">Search book</button>
+        </div>
+
+    </form>
+{% endblock %}

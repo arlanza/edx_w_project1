@@ -14,7 +14,7 @@ An example application with Pyhton SQLAlchemy and FLASK_APP
   . usr (key: name)
   . book (key: isbn)
   . review (key: book_isbn+usr_name)
-. import.py - Import books.csv (import book.model)
+. import.py - Import books.csv (import book.model) ignoring header
 
 ### Other files
 . requeriments.txt - List of package requeriments and versions.

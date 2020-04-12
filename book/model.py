@@ -4,7 +4,7 @@ db = SQLAlchemy()
 
 class Book(db.Model):
     __tablename__ = "book"
-    isbn = db.Column(db.Integer, primary_key=True)
+    isbn = db.Column(db.String, primary_key=True)
     title = db.Column(db.String, nullable=False)
     author = db.Column(db.String, nullable=False)
     year = db.Column(db.Integer, nullable=False)
@@ -16,7 +16,7 @@ class Book(db.Model):
         print(f"Year: {self.year}")
 
 class User(db.Model):
-    __tablename__ = "usr"
+    __tablename__ = "user"
     name = db.Column(db.String, primary_key=True)
     passwd = db.Column(db.String, nullable=False)
     fullname = db.Column(db.String, nullable=False)
@@ -32,13 +32,13 @@ class User(db.Model):
 
 class Review(db.Model):
     __tablename__ = "review"
-    book_isbn = db.Column(db.Integer, db.ForeignKey("book.isbn"), primary_key=True)
-    usr_name = db.Column(db.String, db.ForeignKey("usr.name"), primary_key=True)
+    book_isbn = db.Column(db.String, db.ForeignKey("book.isbn"), primary_key=True)
+    user_name = db.Column(db.String, db.ForeignKey("user.name"), primary_key=True)
     text = db.Column(db.String, nullable=False)
     rating = db.Column(db.Integer, nullable=False)
 
     def print_info(self):
         print(f"Book_isbn: {self.book_isbn}")
-        print(f"Usr_name: {self.usr_name}")
+        print(f"User_name: {self.user_name}")
         print(f"Text: {self.text}")
         print(f"Rating: {self.rating}")

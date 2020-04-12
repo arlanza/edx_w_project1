@@ -41,14 +41,24 @@ def index():
 
 
 #Show registration form
-@app.route("/signup")
-def signup():
-    return render_template("registration.html")
+@app.route("/showregistrationform")
+def showregistrationform():
+    """Show registration form """
+    try:
+        name = session['user_name']
+    except KeyError:
+        #not logged in - show form
+        return render_template("registration.html")
+
+    # Already logged in - Error
+    return render_template("error.html", message="Your are already logged in. Your must logout")
+
 
 #Registration
 @app.route("/registration", methods=["POST"])
 def registration():
-    """Register a reader."""
+    """Register a user."""
+
     # Get form information.
     try:
         fullname = request.form.get("fullname")
@@ -60,7 +70,7 @@ def registration():
     if not fullname or not name or not pwd:
         return render_template("error.html", message="Not empty data allowed")
 
-    # Not previous user registed
+    # Not previous user.name registed in db
     user = User.query.get(name);
     if user is not None:
         return render_template("error.html", message="There's already a user with this name. Choose another name, please.")
@@ -76,14 +86,25 @@ def registration():
     #output
     return render_template("success.html", message= f"{user.name} registrated.")
 
-@app.route('/signin')
-def signin():
-    return render_template("login.html")
+@app.route('/showloginform')
+def showloginform():
+    """Show login form."""
+
+    #Check if is logged in
+    try:
+        name = session['user_name']
+    except KeyError:
+        # Not logged in - show login form
+        return render_template("login.html")
+
+    return render_template("error.html", message="Your are already logged in. Your must logout")
+
+
 
 
 @app.route('/login', methods=["POST"])
 def login():
-    """Login a reader."""
+    """Login a user"""
     # Get form information.
     try:
         name     = request.form.get("name")
@@ -117,6 +138,7 @@ def login():
 
 @app.route('/logout', methods=["GET","POST"])
 def logout():
+    """Logout a user"""
     try:
         name = session['user_name']
     except KeyError:
@@ -124,3 +146,53 @@ def logout():
 
     session.pop('user_name', None)
     return render_template("success.html", message= f"{name} logged out")
+
+@app.route('/showsearchbookform', methods=["GET","POST"])
+def showsearchbookform():
+    """Show Search book form"""
+    # Check if is logged in
+    try:
+        name = session['user_name']
+    except KeyError:
+        return render_template("error.html", message="Your must be logged in")
+
+    # Show showsearchbookform
+    return render_template("bookform.html")
+
+@app.route('/booksearch', methods=["POST"])
+def booksearch():
+    """Search a book"""
+    # Check if is logged in
+    try:
+        name = session['user_name']
+    except KeyError:
+        return render_template("error.html", message="Your must be logged in")
+
+    # Get form info
+    try:
+        isbn     = request.form.get("isbn")
+        title      = request.form.get("title")
+        author      = request.form.get("author")
+    except ValueError:
+            return render_template("error.html", message="Invalid data")
+
+    if not isbn and not title and not author:
+        return render_template("error.html", message="Your must insert, at least, part of a data");
+
+    # Search
+    # TODO:: FILTER QUERY
+
+    books=Book.query.all();
+    return render_template("books.html",books=books)
+
+
+@app.route("/books/<string:isbn>")
+def book(isbn):
+    """List details about a book"""
+
+    # Make sure book exists.
+    book = Book.query.get(isbn)
+    if book is None:
+        return render_template("error.html", message="No such book.")
+
+    return render_template("book.html", book=book)
