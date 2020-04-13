@@ -5,8 +5,9 @@ An example application with Pyhton SQLAlchemy and FLASK_APP
 ## Files
 
 ### Flask Application - book directory
-  book/application.py Flask Aplicacion
-  book/model.py - SQLAlchemy models for DB and classes
+ .book/application.py Flask Aplicacion
+ .book/model.py - SQLAlchemy models for DB and classes
+ 
 
 #### End points for flask append
 
