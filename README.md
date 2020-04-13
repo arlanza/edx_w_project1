@@ -7,7 +7,8 @@ An example application with Pyhton SQLAlchemy and FLASK_APP
 ### Flask Application - book directory
  * book/application.py Flask Aplicacion
  * book/model.py - SQLAlchemy models for DB and classes
- 
+ * book/templates/ - html files
+
 
 #### End points for flask append
 
@@ -55,4 +56,3 @@ API Access: If users make a GET request to your website’s /api/<isbn> route, w
     "average_score": 5.0
 }
 If the requested ISBN number isn’t in your database, your website should return a 404 error.
-
