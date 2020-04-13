@@ -5,37 +5,37 @@ An example application with Pyhton SQLAlchemy and FLASK_APP
 ## Files
 
 ### Flask Application - book directory
-. book/application.py Flask Aplicacion
-. book/model.py - SQLAlchemy models for DB and classes
+ * book/application.py Flask Aplicacion
+ * book/model.py - SQLAlchemy models for DB and classes
+ 
 
 #### End points for flask append
 
-. @app.route("/showregistrationform")
-. @app.route("/registration", methods=["POST"])
-. @app.route('/login', methods=["POST"])
-. @app.route('/logout', methods=["GET","POST"])
-. @app.route('/showsearchbookform', methods=["GET","POST"])
-. @app.route('/booksearch', methods=["POST"])
-. @app.route("/books/<string:isbn>", methods=["GET","POST"])
-. @app.route("/books/<string:isbn>/reviewadd", methods=["POST"])
-. @app.route("/api/<string:isbn>")
+ * @app.route("/showregistrationform")
+ * @app.route("/registration", methods=["POST"])
+ * @app.route('/login', methods=["POST"])
+ * @app.route('/logout', methods=["GET","POST"])
+ * @app.route('/showsearchbookform', methods=["GET","POST"])
+ * @app.route('/booksearch', methods=["POST"])
+ * @app.route("/books/<string:isbn>", methods=["GET","POST"])
+ * @app.route("/books/<string:isbn>/reviewadd", methods=["POST"])
+ * @app.route("/api/<string:isbn>")
 
 
 ### Utils
-. createdb.py - Create tables (import book.model)
-  . book (key: isbn)
-  . usr (key: name)
-  . review (key: book_isbn + usr_name)
-. import.py - Import books.csv (import book.model) ignoring header
+ * createdb.py - Create tables (import book.model)
+   * book (key: isbn)
+   * usr (key: name)
+   * review (key: book_isbn + usr_name)
+ * import.py - Import books.csv (import book.model) ignoring header
 
 ### Other files
-. requeriments.txt - List of package requeriments and versions.
-. books.csv -books to import
-. env.sh - environment to load.
+* requeriments.txt - List of package requeriments and versions.
+* books.csv -books to import
+* env.sh - environment to load.
 
 ## App Requeriments
 
-Alright, it’s time to actually build your web application! Here are the requirements:
 
 Registration: Users should be able to register for your website, providing (at minimum) a username and password.
 Login: Users, once registered, should be able to log in to your website with their username and password.
@@ -56,7 +56,3 @@ API Access: If users make a GET request to your website’s /api/<isbn> route, w
 }
 If the requested ISBN number isn’t in your database, your website should return a 404 error.
 
-You should be using raw SQL commands (as via SQLAlchemy’s execute method) in order to make database queries. You should not use the SQLAlchemy ORM (if familiar with it) for this project.
-In README.md, include a short writeup describing your project, what’s contained in each file, and (optionally) any other additional information the staff should know about your project.
-If you’ve added any Python packages that need to be installed in order to run your web application, be sure to add them to requirements.txt!
-Beyond these requirements, the design, look, and feel of the website are up to you! You’re also welcome to add additional features to your website, so long as you meet the requirements laid out in the above specification!
