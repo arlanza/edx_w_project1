@@ -8,12 +8,24 @@ An example application with Pyhton SQLAlchemy and FLASK_APP
 . book/application.py Flask Aplicacion
 . book/model.py - SQLAlchemy models for DB and classes
 
+#### End points for flask append
+
+. @app.route("/showregistrationform")
+. @app.route("/registration", methods=["POST"])
+. @app.route('/login', methods=["POST"])
+. @app.route('/logout', methods=["GET","POST"])
+. @app.route('/showsearchbookform', methods=["GET","POST"])
+. @app.route('/booksearch', methods=["POST"])
+. @app.route("/books/<string:isbn>", methods=["GET","POST"])
+. @app.route("/books/<string:isbn>/reviewadd", methods=["POST"])
+. @app.route("/api/<string:isbn>")
+
 
 ### Utils
 . createdb.py - Create tables (import book.model)
-  . usr (key: name)
   . book (key: isbn)
-  . review (key: book_isbn+usr_name)
+  . usr (key: name)
+  . review (key: book_isbn + usr_name)
 . import.py - Import books.csv (import book.model) ignoring header
 
 ### Other files

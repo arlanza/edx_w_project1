@@ -93,7 +93,7 @@ def registration():
     session['user_name']=user.name;
 
     #output
-    return render_template("success.html", message= f"{user.name} registrated. Pwd: {pwd} PwdEncoded: {pwd_encoded}")
+    return render_template("success.html", message= f"{user.fullname} registred whith name {user.name} and logged in")
 
 @app.route('/showloginform')
 def showloginform():
@@ -124,9 +124,7 @@ def login():
     if not name or not pwd:
         return render_template("error.html", message="Not empty data allowed")
 
-    # Not previous user registed
-    #user = User.query.filter(and_(name==name,passwd==passwd)).first()
-    #user =  User.query.get(name).filter_by(passwd=passwd)).first()
+    # Not previous user registed with the same name
     user = User.query.get(name)
     if user is None:
         return render_template("error.html", message="Try another Nick")
@@ -135,8 +133,7 @@ def login():
     pwd_encoded = hashlib.sha3_512(pwd.encode()).hexdigest()
 
     if not pwd_encoded == user.passwd:
-        #return render_template("error.html", message= "Invalid passwd")
-        return render_template("error.html", message= f" pwd {pwd} pwd_encoded {pwd_encoded} passwdbd {user.passwd} ")
+        return render_template("error.html", message= "Invalid passwd")
 
     session['user_name']=user.name;
 
@@ -160,7 +157,7 @@ def showsearchbookform():
     try:
         name = session['user_name']
     except KeyError:
-        return render_template("error.html", message="Your must be logged in")
+        return render_template("error.html", message="Your must be logged in order to access to book information")
 
     # Show showsearchbookform
     return render_template("bookform.html")
