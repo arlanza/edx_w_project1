@@ -4,4 +4,4 @@ psycopg2-binary
 SQLAlchemy
 flask_sqlalchemy
 requests
-werkzeug==0.16.0
+werkzeug==2.2.3
